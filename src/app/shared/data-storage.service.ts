@@ -1,23 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RecipeService } from './../recipes/recipe.service';
-import { apiKey } from '../api-key/api-key';
+import { requestUrl } from '../api-key/api-key';
 import { Recipe } from './../recipes/recipe.model';
 import { map, tap } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
-  constructor(private http: HttpClient, private recipeService: RecipeService) {}
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService,
+    private authService: AuthService
+  ) {}
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
-    this.http.put(apiKey + 'recipes.json', recipes).subscribe((response) => {
-      console.log(response);
-    });
+    this.http
+      .put(requestUrl + 'recipes.json', recipes)
+      .subscribe((response) => {
+        console.log(response);
+      });
   }
 
   fetchRecipes() {
-    return this.http.get<Recipe[]>(apiKey + 'recipes.json').pipe(
+    return this.http.get<Recipe[]>(requestUrl + 'recipes.json').pipe(
       map((recipes) => {
         return recipes.map((recipe) => {
           return {
