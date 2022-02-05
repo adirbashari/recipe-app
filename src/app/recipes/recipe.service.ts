@@ -6,28 +6,14 @@ import { Recipe } from './recipe.model';
   providedIn: 'root',
 })
 export class RecipeService {
-  private recipes: Recipe[] = [
-    {
-      name: 'recipe 1',
-      description: 'recipe 1 description',
-      imagePath: 'image recipe 1',
-      ingredients: [
-        { name: 'apple', amount: 3 },
-        { name: 'tomato', amount: 7 },
-      ],
-    },
-    {
-      name: 'recipe 2',
-      description: 'recipe 2 description',
-      imagePath: 'image recipe 2',
-      ingredients: [
-        { name: 'banana', amount: 5 },
-        { name: 'afarsek', amount: 1 },
-      ],
-    },
-  ];
+  private recipes: Recipe[] = [];
   changedRecipes = new Subject<Recipe[]>();
   constructor() {}
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.changedRecipes.next([...this.recipes]);
+  }
 
   getRecipes() {
     return [...this.recipes];
